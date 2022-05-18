@@ -5,7 +5,7 @@ import commands
 api_key = sys.argv[1]
 api = TodoistAPI(api_key)
 
-commands = [commands.Projects(api, 'project')]
+commands = [commands.Projects(api, 'project'), commands.Tasks(api, 'tasks')]
 
 '''
 TODO

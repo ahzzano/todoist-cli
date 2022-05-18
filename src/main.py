@@ -28,3 +28,6 @@ if __name__ == '__main__':
         for c in commands: 
             if user_input_list[0] == c.name:
                 c.on_command(user_input_list)
+            
+            if(user_input_list[0] == 'exit'):
+                exit()

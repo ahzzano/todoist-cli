@@ -54,7 +54,7 @@ class Projects(BaseCommand):
                     print(f'{i.name}')
                     
                     for s in sections:
-                        tasks_from_section = self.api.get_tasks(section_id=s.id)
+                        tasks_from_section = list(filter(lambda t: t.section_id == s.id, state.tasks))
                         print(f'--{s.name} ({len(tasks_from_section)})')
 
             if args[1] == 'set':

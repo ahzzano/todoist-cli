@@ -3,6 +3,7 @@ from commands.BaseCommand import BaseCommand
 from state.state import State
 from todoist_api_python.api import Project
 
+
 class Projects(BaseCommand):
     def on_initialize(self):
         self.projects = self.api.get_projects() 
@@ -15,10 +16,32 @@ class Projects(BaseCommand):
                     sections = self.api.get_sections(project_id=state.current_project.id)
                     for s in sections: 
                         print(s.name)
-                        tasks = self.api.get_tasks(section_id=s.id)
+                        tasks = filter(lambda t: t.section_id == s.id, state.tasks)
+                        prev_task = None
+                        prev_parent = None
+                        current_parent = None
+                        level = 1 
 
                         for t in tasks:
-                            print(f'--{t.content} | {t.parent_id}')
+                            if t.parent_id and not current_parent is None:
+                                pass
+
+                            elif t.parent_id and current_parent is None:
+                                current_parent = list(filter(lambda task: task.id == t.parent_id, state.tasks))[0]
+                                level += 1
+
+                            elif t.parent_id and prev_task.id != current_parent.id:
+                                current_parent = t
+                                level += 1
+
+                            else: 
+                                current_parent = None
+                                level = 1 
+
+                            print('--' * level + f' {t.content}')
+
+                            prev_task = t
+
 
                 if args[2] == 'sections':
                     sections = self.api.get_sections(project_id=state.current_project.id)

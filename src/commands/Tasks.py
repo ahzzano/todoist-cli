@@ -13,6 +13,7 @@ class Tasks(BaseCommand):
                 if not t.project_id in sections.keys():
                     sections[t.project_id] = []
                     
+                    
                 sections[t.project_id].append(t.content)
 
             print(sections)

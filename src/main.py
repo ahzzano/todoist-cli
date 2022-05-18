@@ -7,7 +7,7 @@ api_key = sys.argv[1]
 api = TodoistAPI(api_key)
 
 commands = [commands.Projects(api, 'project'), commands.Tasks(api, 'tasks')]
-state = State()
+state = State(None)
 
 '''
 TODO
@@ -18,25 +18,29 @@ Important
 > project
    > project get tasks
    > project get sections
+   > project set <project name>
+   > project unset
    > project <section name> tasks 
-   > project <section name> <task> complete
-   > project <section name> <task> remove
 > tasks
     > tasks <task name> complete
     > tasks <task name> remove
+    > tasks create <task name>
 > inbox
+> refresh
 
 2. API Response
 3. Yeah
 '''
 
 if __name__ == '__main__':
+    inbox = list(filter(lambda p: p.name == 'Inbox', api.get_projects()))
+    state.set_project(inbox[0])
     while True: 
-        user_input = input('> ')
+        user_input = input(f'({state.current_project.name}) > ')
         user_input_list = user_input.split()
         for c in commands: 
             if user_input_list[0] == c.name:
-                c.on_command(user_input_list)
+                c.on_command(user_input_list, state)
             
             if(user_input_list[0] == 'exit'):
                 exit()

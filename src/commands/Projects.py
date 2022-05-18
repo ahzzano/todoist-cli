@@ -1,21 +1,49 @@
 from asyncio import tasks
 from commands.BaseCommand import BaseCommand
 from state.state import State
+from todoist_api_python.api import Project
 
 class Projects(BaseCommand):
+    def on_initialize(self):
+        self.projects = self.api.get_projects() 
+        self.inbox = list(filter(lambda p: p.name == 'Inbox', self.projects))[0]
+
     def on_command(self, args: list, state: State):
         try:
-            projects = self.api.get_projects()
+            if args[1] == 'get':
+                if args[2] == 'tasks':
+                    sections = self.api.get_sections(project_id=state.current_project.id)
+                    for s in sections: 
+                        print(s.name)
+                        tasks = self.api.get_tasks(section_id=s.id)
 
-            for i in projects:
-                sections = self.api.get_sections(project_id=i.id)
-                print(f'{i.name}')
-                
-                for s in sections:
+                        for t in tasks:
+                            print(f'--{t.content} | {t.parent_id}')
 
-                    tasks_from_section = self.api.get_tasks(section_id=s.id)
-                    print(f'--{s.name} ({len(tasks_from_section)})')
-                print('\n')
+                if args[2] == 'sections':
+                    sections = self.api.get_sections(project_id=state.current_project.id)
+                    for s in sections: 
+                        print(s.name)
+
+            if args[1] == 'list':
+                for i in self.projects:
+                    sections = self.api.get_sections(project_id=i.id)
+                    print(f'{i.name}')
+                    
+                    for s in sections:
+                        tasks_from_section = self.api.get_tasks(section_id=s.id)
+                        print(f'--{s.name} ({len(tasks_from_section)})')
+
+            if args[1] == 'set':
+                project_name = ' '.join(args[2:])
+                selected_project = list(filter(lambda p: p.name == project_name, self.projects))
+                if len(selected_project) <= 0:
+                    print('project not found!')
+                    return
+                state.set_project(selected_project[0])
+
+            if args[1] == 'unset':
+                state.set_project(self.inbox)
 
         except Exception as e:
             print(e)

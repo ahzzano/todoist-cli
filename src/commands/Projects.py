@@ -1,8 +1,9 @@
 from asyncio import tasks
 from commands.BaseCommand import BaseCommand
+from state.state import State
 
 class Projects(BaseCommand):
-    def on_command(self, args: list):
+    def on_command(self, args: list, state: State):
         try:
             projects = self.api.get_projects()
 

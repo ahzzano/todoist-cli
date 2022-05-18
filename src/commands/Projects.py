@@ -23,13 +23,15 @@ class Projects(BaseCommand):
 
                         for t in tasks:
                             if t.parent_id and not current_parent is None:
-                                pass
-
-                            elif t.parent_id and current_parent is None:
+                                if t.parent_id and t.parent_id != current_parent.id:
+                                    current_parent = t
+                                    level += 1
+  
+                            elif t.parent_id and not current_parent:
                                 current_parent = list(filter(lambda task: task.id == t.parent_id, state.tasks))[0]
                                 level += 1
 
-                            elif t.parent_id and prev_task.id != current_parent.id:
+                            elif t.parent_id and t.parent_id != current_parent.id:
                                 current_parent = t
                                 level += 1
 
@@ -37,7 +39,7 @@ class Projects(BaseCommand):
                                 current_parent = None
                                 level = 1 
 
-                            print('--' * level + f' {t.content}')
+                            print('----' * level + f' {t.content}')
 
                             prev_task = t
 

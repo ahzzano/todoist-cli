@@ -1,8 +1,9 @@
 from lib2to3.pytree import Base
 from commands.BaseCommand import BaseCommand
+from state.state import State
 
 class Tasks(BaseCommand):
-    def on_command(self, args: list):
+    def on_command(self, args: list, state: State):
         try:
             tasks = self.api.get_tasks()
 

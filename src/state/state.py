@@ -39,11 +39,8 @@ class State:
                     tasks[current_index] = e
                     tasks[prev_index] = temp
 
-                    print(f'{tasks.index(e)} -> {current_index}')
                     current_index += 1
 
                 rerun = True
                 
-
-            
-
+        self.tasks = tasks

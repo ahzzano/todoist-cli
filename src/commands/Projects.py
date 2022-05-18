@@ -3,7 +3,6 @@ from commands.BaseCommand import BaseCommand
 from state.state import State
 from todoist_api_python.api import Project
 
-
 class Projects(BaseCommand):
     def on_initialize(self):
         self.projects = self.api.get_projects() 

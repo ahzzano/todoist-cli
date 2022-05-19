@@ -1,4 +1,5 @@
 from lib2to3.pytree import Base
+from re import I
 from commands.BaseCommand import BaseCommand
 from state.state import State
 
@@ -28,6 +29,10 @@ class Tasks(BaseCommand):
                 args[1] = task_name
                 args.append(temp)
 
+            if args[-1] == 'create':
+                self.api.add_task(args[1])
+                return
+
             task = list(filter(lambda a: a.content == args[1], state.tasks))[-1]
 
             if args[-1] == 'complete':
@@ -38,6 +43,9 @@ class Tasks(BaseCommand):
                 due_date = task.due
                 if due_date.recurring:
                     print('daily task')
+            
+            if args[-1] == 'remove':
+                self.api.delete_task(task.id)
 
             state.set_tasks(self.api.get_tasks())
 

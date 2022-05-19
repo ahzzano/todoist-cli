@@ -24,7 +24,7 @@ Important
 > tasks
     > tasks <task name> complete
     > tasks <task name> remove
-    > tasks create <task name>
+    > tasks <task name> create 
 > inbox
 > refresh
 

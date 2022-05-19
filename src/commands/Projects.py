@@ -16,8 +16,6 @@ class Projects(BaseCommand):
                     for s in sections: 
                         print(s.name)
                         tasks = filter(lambda t: t.section_id == s.id, state.tasks)
-                        prev_task = None
-                        prev_parent = None
                         current_parent = None
                         level = 1 
 
@@ -40,9 +38,6 @@ class Projects(BaseCommand):
                                 level = 1 
 
                             print('----' * level + f' {t.content}')
-
-                            prev_task = t
-
 
                 if args[2] == 'sections':
                     sections = self.api.get_sections(project_id=state.current_project.id)

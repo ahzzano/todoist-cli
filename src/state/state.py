@@ -25,11 +25,7 @@ class State:
             rerun = False
 
             if elements_to_move:
-                parent_id = elements_to_move[0].parent_id
-                parent_object = list(filter(lambda t: t.id == parent_id, tasks))[0]
-
-                start_index = tasks.index(parent_object) + 1
-                end_index = start_index + len(elements_to_move)
+                start_index = index + 1
 
                 current_index = start_index
                 for e in elements_to_move:
